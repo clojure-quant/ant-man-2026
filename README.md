@@ -1,9 +1,11 @@
-
-
 # web frontend
 
 - WEB COMPONENTS
   - extend browser html tags with custom components. that's the way to do.
+  - need to test all components that shall be used before coding up frontend.
+    (grid-table / layout manager / charts) and see that they work for big maximum data;
+    most npmjs componets are bloated, and get to performance issues at some point.
+
 
 - HTMX / REACT / ELECTRIC 
 
