@@ -27,6 +27,10 @@
   - ELECTRIC
     - is the best solution, but commercial, waiting for termsheet.
 
+  - SCITTLE
+    - small fast engine that can be sent code on the fly that creates very fast js code,
+    - might be that this is all that is needed.
+
 - ACCESS CONTROL
   - google login
   - emergency code tokens
