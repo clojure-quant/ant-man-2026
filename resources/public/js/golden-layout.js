@@ -40,11 +40,13 @@ const LAYOUT_CONFIG = {
 
 function fillContainer(container, child) {
   const parent = container.element
+  parent.style.position = "relative"
   parent.style.height = "100%"
   parent.style.width = "100%"
   parent.style.margin = "0"
   parent.style.padding = "0"
   parent.style.overflow = "hidden"
+  parent.style.minHeight = "0"
   parent.appendChild(child)
 }
 

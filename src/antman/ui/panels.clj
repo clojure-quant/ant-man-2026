@@ -14,6 +14,7 @@
   (h/watch! sim/positions*)
   (h/reactive [sim/positions*]
     [:motion.div#panel-positions.panel-root
+     (ui/sse-connection-status)
      [:h2 "Positions"]
      (ui/positions-table @sim/positions*)]))
 

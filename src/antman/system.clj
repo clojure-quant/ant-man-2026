@@ -2,7 +2,8 @@
   (:require
    [hyper.core :as h]
    [antman.routes :refer [routes]]
-   [antman.sim.state :as sim]))
+   [antman.sim.state :as sim]
+   [antman.sse.heartbeat :as heartbeat]))
 
 (defn- layout-head
   []
@@ -25,13 +26,14 @@
     #'routes
     :static-resources "public"
     :head #'head-tags
-    :watches [#'sim/positions* #'sim/trades*]))
+    :watches [#'sim/positions* #'sim/trades* #'heartbeat/server-ts*]))
 
 (defonce server* (atom nil))
 
 (defn start!
   [{:keys [port] :or {port 3000}}]
   (sim/start!)
+  (heartbeat/start!)
   (when-not @server*
     (reset! server* (h/start! (create-handler) {:port port})))
   @server*)
@@ -39,6 +41,7 @@
 (defn stop!
   []
   (sim/stop!)
+  (heartbeat/stop!)
   (when-let [app @server*]
     (h/stop! app)
     (reset! server* nil)))

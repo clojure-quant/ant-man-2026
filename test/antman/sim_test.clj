@@ -29,3 +29,10 @@
           next (state/apply-position-tick! seed)]
       (is (seq next))
       (is (<= (count seed) (count next))))))
+
+(deftest position-update-flash-test
+  (testing "price-flash reflects direction of price move"
+    (with-redefs [rand (constantly 1.0)]
+      (is (= :up (:price-flash (gen/position-update {:price 100.0 :entry 90.0})))))
+    (with-redefs [rand (constantly 0.0)]
+      (is (= :down (:price-flash (gen/position-update {:price 100.0 :entry 90.0})))))))

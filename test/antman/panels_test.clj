@@ -12,6 +12,7 @@
     (reset! sim/positions* (gen/seed-positions 2))
     (let [result (ht/test-page positions-panel)]
       (is (str/includes? (:body-html result) "Positions"))
+      (is (str/includes? (:body-html result) "sse-connection-status"))
       (is (str/includes? (:body-html result) "Broker"))
       (is (str/includes? (:body-html result) "P/L")))))
 

@@ -8,6 +8,7 @@
   [_req]
   [:motion.div.layout-page
    (ui/nav)
+   (ui/sse-connection-status)
    [:motion.div#golden-layout-host.golden-layout-host
     {:data-on-load "antmanInitLayout()"}
     [:motion.div#gl-mount]]

@@ -30,10 +30,18 @@
       :tp (or tp (+ entry 10.0))
       :sl (or sl (- entry 5.0))})))
 
-(defn position-update [pos]
-  (let [price (+ (:price pos) (* (- (rand) 0.5) 2.0))
-        pl (- price (:entry pos))]
-    (assoc pos :price price :pl pl)))
+(defn position-update
+  "Update price/pl and set :price-flash to :up or :down when price moves."
+  [pos]
+  (let [old-price (:price pos)
+        price (+ old-price (* (- (rand) 0.5) 2.0))
+        pl (- price (:entry pos))
+        flash (cond
+                (> price old-price) :up
+                (< price old-price) :down
+                :else nil)]
+    (cond-> (assoc pos :price price :pl pl)
+      flash (assoc :price-flash flash))))
 
 (defn trade []
   {:id (new-id)

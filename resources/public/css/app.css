@@ -86,6 +86,39 @@ tr:nth-child(even) {
 .profit { color: #4ade80; }
 .loss { color: #f87171; }
 
+@keyframes price-flash-up {
+  from { background-color: rgba(74, 222, 128, 0.55); }
+  to { background-color: transparent; }
+}
+
+@keyframes price-flash-down {
+  from { background-color: rgba(248, 113, 113, 0.55); }
+  to { background-color: transparent; }
+}
+
+.positions-table td.price.price-flash-up {
+  animation: price-flash-up 0.9s ease-out;
+}
+
+.positions-table td.price.price-flash-down {
+  animation: price-flash-down 0.9s ease-out;
+}
+
+.sse-connection-status {
+  min-height: 0;
+}
+
+.sse-interrupted {
+  display: none;
+  margin-bottom: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  background: #7f1d1d;
+  color: #fecaca;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 .layout-page .golden-layout-host {
   flex: 1 1 auto;
   min-height: 0;
@@ -112,8 +145,11 @@ tr:nth-child(even) {
 }
 
 .layout-page .lm_content > * {
+  position: relative;
   height: 100%;
   width: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .memo-panel {
@@ -139,14 +175,16 @@ tr:nth-child(even) {
 }
 
 .lm_content .panel-root {
-  display: block;
+  display: flex;
+  flex-direction: column;
   position: absolute;
   inset: 0;
   margin: 0;
   padding: 0.5rem;
   box-sizing: border-box;
   background-color: #1a1a2e;
-  overflow: auto;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .panel-root table {
@@ -155,11 +193,13 @@ tr:nth-child(even) {
 
 /* Trades: scroll body, newest first, sticky column headers */
 .trades-table-wrap {
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: auto;
 }
 
 .trading-page .trades-table-wrap {
+  flex: none;
   max-height: 60vh;
 }
 
@@ -176,10 +216,15 @@ tr:nth-child(even) {
   box-shadow: 0 1px 0 #333;
 }
 
-.lm_content .panel-root {
-  overflow: hidden;
-}
-
 .lm_content .panel-root:has(.trades-table-wrap) {
   padding: 0;
+}
+
+.lm_content .panel-root:has(.trades-table-wrap) .trades-table-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.lm_content .panel-root:not(:has(.trades-table-wrap)) {
+  overflow: auto;
 }

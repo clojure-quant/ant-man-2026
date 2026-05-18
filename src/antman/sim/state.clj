@@ -9,14 +9,19 @@
 
 (defonce sim-disposers* (atom {}))
 
+(defn- clear-price-flashes
+  [positions]
+  (mapv #(dissoc % :price-flash) positions))
+
 (defn apply-position-tick!
   "Update a random position's price/pl, or add a new one occasionally."
   [positions]
-  (if (and (seq positions) (< (rand) 0.85))
-    (let [idx (rand-int (count positions))
-          pos (nth positions idx)]
-      (assoc positions idx (gen/position-update pos)))
-    (conj (or positions []) (gen/position))))
+  (let [positions (clear-price-flashes positions)]
+    (if (and (seq positions) (< (rand) 0.85))
+      (let [idx (rand-int (count positions))
+            pos (nth positions idx)]
+        (assoc positions idx (gen/position-update pos)))
+      (conj (or positions []) (gen/position)))))
 
 (defn start!
   []
