@@ -119,6 +119,10 @@ tr:nth-child(even) {
   font-weight: 500;
 }
 
+.sse-connection-status.is-stale .sse-interrupted {
+  display: block;
+}
+
 .layout-page .golden-layout-host {
   flex: 1 1 auto;
   min-height: 0;

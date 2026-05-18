@@ -15,7 +15,8 @@
 
 (defn head-tags
   [req]
-  (let [base [[:link {:rel "stylesheet" :href "/css/app.css"}]]]
+  (let [base [[:link {:rel "stylesheet" :href "/css/app.css"}]
+              [:script {:src "/js/sse-reconnect.js" :defer true}]]]
     (if (= :layout (get-in req [:hyper/route :name]))
       (into base (layout-head))
       base)))

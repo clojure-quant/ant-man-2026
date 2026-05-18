@@ -1,5 +1,6 @@
 (ns antman.ui.components
   (:require
+   [hyper.context :as ctx]
    [hyper.core :as h]
    [antman.sse.heartbeat :as heartbeat]))
 
@@ -58,24 +59,18 @@
         [:td qty]
         [:td (fmt-num price)]])]]])
 
-(defn- stale-check-expr
-  [stale?* ready?*]
-  (str @ready?* " = Number(document.getElementById('sse-connection-status')"
-       "?.getAttribute('data-server-ts') || 0) > 0; "
-       @stale?* " = " @ready?* " && (Date.now() - Number(document.getElementById('sse-connection-status')"
-       "?.getAttribute('data-server-ts') || 0)) > 2000"))
-
 (defn sse-connection-status
-  "Reactive banner: shows when SSE timestamps stop updating for >2s."
+  "Banner when SSE timestamps stop updating for >2s.
+   Stale detection + auto-reconnect live in /js/sse-reconnect.js."
   []
-  (let [stale?* (h/local-signal :sse-stale false)
-        ready?* (h/local-signal :sse-ready false)]
-    (h/reactive [heartbeat/server-ts*]
-      [:motion.div#sse-connection-status.sse-connection-status
-       {:data-server-ts @heartbeat/server-ts*
-        :data-on-interval__duration.1s (stale-check-expr stale?* ready?*)}
-       [:motion.div.sse-interrupted {:data-show @stale?*}
-        "server connection interrupted"]])))
+  (let [tab-id (:hyper/tab-id ctx/*request*)]
+    [:motion.div#sse-connection-status.sse-connection-status
+     (when tab-id {:data-tab-id tab-id})
+     (h/reactive [heartbeat/server-ts*]
+       [:motion.span#sse-server-ts
+        {:data-server-ts @heartbeat/server-ts*
+         :hidden true}])
+     [:motion.div.sse-interrupted "server connection interrupted"]]))
 
 (defn nav
   []
