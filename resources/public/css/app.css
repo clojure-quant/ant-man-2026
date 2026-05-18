@@ -1,0 +1,185 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: #1a1a2e;
+  color: #eee;
+}
+
+.app-nav {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #333;
+}
+
+.app-nav a {
+  color: #7eb8ff;
+  text-decoration: none;
+}
+
+.app-nav a:hover {
+  text-decoration: underline;
+}
+
+.trading-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+body:has(.layout-page) {
+  overflow: hidden;
+}
+
+#hyper-app:has(.layout-page) {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.layout-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.layout-page .app-nav {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.5rem 1rem;
+}
+
+.muted {
+  color: #888;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th, td {
+  border: 1px solid #333;
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+
+th {
+  background: #16213e;
+}
+
+tr:nth-child(even) {
+  background: #0f0f1a;
+}
+
+.profit { color: #4ade80; }
+.loss { color: #f87171; }
+
+.layout-page .golden-layout-host {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Golden Layout: one background, no black gap under tabs */
+.layout-page .lm_goldenlayout,
+.layout-page .lm_stack,
+.layout-page .lm_item,
+.layout-page .lm_items,
+.layout-page .lm_content {
+  background-color: #1a1a2e;
+}
+
+.layout-page .lm_content {
+  border: none;
+}
+
+.layout-page .lm_stack > .lm_items {
+  background-color: #1a1a2e;
+}
+
+.layout-page .lm_content > * {
+  height: 100%;
+  width: 100%;
+}
+
+.memo-panel {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  background-color: #1a1a2e;
+  overflow: auto;
+}
+
+.memo-panel p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #a8d4ff;
+}
+
+/* Stream panels live on layout-page until moved into Golden Layout */
+.layout-page > #panel-positions,
+.layout-page > #panel-trades {
+  display: none;
+}
+
+.lm_content .panel-root {
+  display: block;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  background-color: #1a1a2e;
+  overflow: auto;
+}
+
+.panel-root table {
+  font-size: 0.8rem;
+}
+
+/* Trades: scroll body, newest first, sticky column headers */
+.trades-table-wrap {
+  height: 100%;
+  overflow: auto;
+}
+
+.trading-page .trades-table-wrap {
+  max-height: 60vh;
+}
+
+.trades-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.trades-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #16213e;
+  box-shadow: 0 1px 0 #333;
+}
+
+.lm_content .panel-root {
+  overflow: hidden;
+}
+
+.lm_content .panel-root:has(.trades-table-wrap) {
+  padding: 0;
+}

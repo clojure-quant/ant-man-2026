@@ -1,41 +1,37 @@
-# web frontend
+# ant-man-2026
 
-- WEB COMPONENTS
-  - extend browser html tags with custom components. that's the way to do.
-  - need to test all components that shall be used before coding up frontend.
-    (grid-table / layout manager / charts) and see that they work for big maximum data;
-    most npmjs componets are bloated, and get to performance issues at some point.
+Demo trading UI: **Hyper** (server-rendered reactive HTML + SSE), **Missionary** (`ap` simulators), streamed in-memory positions and trades.
 
+## Requirements
 
-- HTMX / REACT / ELECTRIC 
+- JDK **21+** (Hyper uses virtual threads)
+- Clojure CLI
 
-  - HTMX
-    - https://github.com/dynamic-alpha/hyper
-    - https://github.com/tatut/ripley
+## Run
 
-    - https://andersmurphy.com/2025/04/07/clojure-realtime-collaborative-web-apps-without-clojurescript.html
+```bash
+clojure -M:run
+```
 
-    - https://github.com/starfederation/datastar-clojure/blob/main/README.md
-    - https://data-star.dev/
-    - https://cells.andersmurphy.com/ 1 billion cell table (datastar demo)
+Open:
 
-    - https://github.com/jeremykross/spacegolfbang (missionary in game engine)
+- http://localhost:3000/trading — full-page positions and trades tables
+- http://localhost:3000/layout — Golden Layout v2 workspace with panel tabs
 
-  - REACT
-    - pitch/uix
+Tables update live over SSE as the simulators tick.
 
-  - ELECTRIC
-    - is the best solution, but commercial, waiting for termsheet.
+## Test
 
-  - SCITTLE
-    - small fast engine that can be sent code on the fly that creates very fast js code,
-    - might be that this is all that is needed.
+```bash
+clojure -M:test
+```
 
-- ACCESS CONTROL
-  - google login
-  - emergency code tokens
-  - email/password
-  - expiry of tokens must happen on saturday?
+## Stack
 
+| Layer | Library |
+|-------|---------|
+| Web | [Hyper](https://github.com/dynamic-alpha/hyper) |
+| Reactive sim | [Missionary](https://github.com/leonoel/missionary) |
+| Layout | [Golden Layout](https://golden-layout.github.io/golden-layout/) v2 |
 
-
+No database in v1 — simulators write to `positions*` and `trades*` atoms; Hyper watches push HTML updates to the browser.
