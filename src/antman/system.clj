@@ -24,7 +24,7 @@
     #'routes
     :static-resources "public"
     :head #'head-tags
-    :watches [#'sim/positions* #'sim/trades* #'heartbeat/server-ts*]))
+    :watches [#'sim/positions* #'sim/trades* #'sim/notifications* #'heartbeat/server-ts*]))
 
 (defonce server* (atom nil))
 

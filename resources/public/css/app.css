@@ -176,8 +176,95 @@ tr:nth-child(even) {
 
 /* Stream panels live on layout-page until moved into Golden Layout */
 .layout-page > #panel-positions,
-.layout-page > #panel-trades {
+.layout-page > #panel-trades,
+.layout-page > #panel-notifications {
   display: none;
+}
+
+.notifications-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.notifications-heading {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #a8d4ff;
+}
+
+.notifications-empty {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.notifications-table-wrap,
+.notifications-panel:has(.notifications-table) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.notifications-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.75rem;
+}
+
+.notifications-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #16213e;
+  box-shadow: 0 1px 0 #333;
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+}
+
+.notifications-table tbody td {
+  padding: 0.35rem 0.5rem;
+  vertical-align: top;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.notifications-table .message {
+  max-width: 16rem;
+}
+
+.mark-read-btn {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  background: #2a3f5f;
+  color: #e0e0e0;
+  border: 1px solid #4a6a8f;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.mark-read-btn:hover {
+  background: #3a5f8f;
+}
+
+.severity-error .severity {
+  color: #ff6b6b;
+}
+
+.severity-warning .severity {
+  color: #ffd166;
+}
+
+.severity-info .severity {
+  color: #a8d4ff;
+}
+
+.lm_content .panel-root:has(.notifications-panel) {
+  overflow: hidden;
 }
 
 .lm_content .panel-root {

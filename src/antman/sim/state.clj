@@ -1,11 +1,13 @@
 (ns antman.sim.state
   (:require
    [antman.sim.generate :as gen]
+   [antman.sim.notifications :as notifications-sim]
    [antman.sim.positions :as positions-sim]
    [antman.sim.trades :as trades-sim]))
 
 (def positions* (atom (gen/seed-positions 5)))
 (def trades* (atom []))
+(def notifications* (atom []))
 
 (defonce sim-disposers* (atom {}))
 
@@ -28,7 +30,8 @@
   (when-not (:positions @sim-disposers*)
     (reset! sim-disposers*
             {:positions (positions-sim/start! positions* apply-position-tick!)
-             :trades (trades-sim/start! trades*)}))
+             :trades (trades-sim/start! trades*)
+             :notifications (notifications-sim/start! notifications*)}))
   :started)
 
 (defn stop!

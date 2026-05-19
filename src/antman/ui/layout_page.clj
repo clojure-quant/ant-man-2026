@@ -17,4 +17,7 @@
       (ui/positions-table @sim/positions*)])
    (h/reactive [sim/trades*]
      [:motion.div#panel-trades.panel-root
-      (ui/trades-table @sim/trades*)])])
+      (ui/trades-table @sim/trades*)])
+   (h/reactive [sim/notifications*]
+     [:motion.div#panel-notifications.panel-root
+      (ui/notifications-panel @sim/notifications*)])])

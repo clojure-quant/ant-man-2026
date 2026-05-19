@@ -34,6 +34,13 @@ const LAYOUT_CONFIG = {
           },
         ],
       },
+      {
+        type: "component",
+        componentType: "notifications",
+        title: "Notifications",
+        size: "22%",
+        minSize: "100px",
+      },
     ],
   },
 }
@@ -63,6 +70,7 @@ function attachStreamPanel(panelElId, containerKey) {
 function attachStreamPanels() {
   attachStreamPanel("panel-positions", "positions")
   attachStreamPanel("panel-trades", "trades")
+  attachStreamPanel("panel-notifications", "notifications")
 }
 
 function registerComponents(layout) {
@@ -81,6 +89,11 @@ function registerComponents(layout) {
   layout.registerComponentFactoryFunction("trades", (container) => {
     panelContainers.trades = container.element
     attachStreamPanel("panel-trades", "trades")
+  })
+
+  layout.registerComponentFactoryFunction("notifications", (container) => {
+    panelContainers.notifications = container.element
+    attachStreamPanel("panel-notifications", "notifications")
   })
 }
 
@@ -113,6 +126,7 @@ function destroyLayout() {
   }
   panelContainers.positions = null
   panelContainers.trades = null
+  panelContainers.notifications = null
 }
 
 function resizeLayout(host) {
