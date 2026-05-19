@@ -28,11 +28,13 @@ body {
   padding: 1rem;
 }
 
-body:has(.layout-page) {
+body:has(.layout-page),
+body:has(.highcharts-random-page) {
   overflow: hidden;
 }
 
-#hyper-app:has(.layout-page) {
+#hyper-app:has(.layout-page),
+#hyper-app:has(.highcharts-random-page) {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -231,4 +233,52 @@ tr:nth-child(even) {
 
 .lm_content .panel-root:not(:has(.trades-table-wrap)) {
   overflow: auto;
+}
+
+.highcharts-random-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0.5rem 1rem 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.highcharts-random-page .app-nav {
+  flex-shrink: 0;
+  margin-bottom: 0.5rem;
+}
+
+.highcharts-random-page h1 {
+  flex-shrink: 0;
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.highcharts-random-page .muted {
+  flex-shrink: 0;
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+}
+
+.charts-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.charts-grid highcharts-chart {
+  display: block;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #0f0f1a;
+  overflow: hidden;
 }

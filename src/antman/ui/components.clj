@@ -77,4 +77,6 @@
   [:nav.app-nav
    [:a (h/navigate :trading) "Trading"]
    " · "
-   [:a (h/navigate :layout) "Layout"]])
+   [:a (h/navigate :layout) "Layout"]
+   " · "
+   [:a (h/navigate :highcharts-random) "Highcharts random"]])

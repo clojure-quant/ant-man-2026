@@ -5,21 +5,18 @@
    [antman.sim.state :as sim]
    [antman.sse.heartbeat :as heartbeat]))
 
-(defn- layout-head
-  []
-  [[:link {:rel "stylesheet"
+(defn head-tags
+  [_req]
+  ;; Scripts/CSS for layout and highcharts-random live in the base head so
+  ;; Hyper client-side navigation between pages still has them loaded.
+  [[:link {:rel "stylesheet" :href "/css/app.css"}]
+   [:script {:src "/js/sse-reconnect.js" :defer true}]
+   [:link {:rel "stylesheet"
            :href "https://cdn.jsdelivr.net/npm/golden-layout@2.6.0/dist/css/goldenlayout-base.css"}]
    [:link {:rel "stylesheet"
            :href "https://cdn.jsdelivr.net/npm/golden-layout@2.6.0/dist/css/themes/goldenlayout-dark-theme.css"}]
-   [:script {:type "module" :src "/js/golden-layout.js"}]])
-
-(defn head-tags
-  [req]
-  (let [base [[:link {:rel "stylesheet" :href "/css/app.css"}]
-              [:script {:src "/js/sse-reconnect.js" :defer true}]]]
-    (if (= :layout (get-in req [:hyper/route :name]))
-      (into base (layout-head))
-      base)))
+   [:script {:type "module" :src "/js/golden-layout.js"}]
+   [:script {:type "module" :src "/js/highcharts-random.js?v=2"}]])
 
 (defn create-handler
   []

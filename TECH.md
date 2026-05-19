@@ -20,6 +20,7 @@
     - https://github.com/starfederation/datastar-clojure/blob/main/README.md
     - https://data-star.dev/
     
+    - https://github.com/ashubham/highcharts-webcomponent
     
 
     - https://github.com/jeremykross/spacegolfbang (missionary in game engine)
