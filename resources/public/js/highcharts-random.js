@@ -10,6 +10,12 @@ let activeTimers = []
 let activeGrid = null
 /** Bumped on destroy so stale "load" handlers do not start tickers. */
 let initSession = 0
+/** Debounce teardown while Hyper morphs between routes. */
+let destroyTimer = null
+/** Coalesce init attempts while SSE / layout mutations fire. */
+let initTimer = null
+const DESTROY_DELAY_MS = 200
+const INIT_DEBOUNCE_MS = 60
 
 function randomWalk(count, start = 100) {
   const data = []
@@ -107,10 +113,45 @@ function startTicker(host, seedPrice) {
   return id
 }
 
+function gridNeedsInit(grid) {
+  if (grid.dataset.initializing === "true") {
+    return false
+  }
+  return (
+    grid.dataset.initialized !== "true" || grid.children.length < CHART_COUNT
+  )
+}
+
+function scheduleDestroy() {
+  if (destroyTimer) {
+    window.clearTimeout(destroyTimer)
+  }
+  destroyTimer = window.setTimeout(() => {
+    destroyTimer = null
+    if (!document.getElementById("charts-grid")) {
+      destroyHighchartsRandom()
+    }
+  }, DESTROY_DELAY_MS)
+}
+
+function cancelScheduledDestroy() {
+  if (destroyTimer) {
+    window.clearTimeout(destroyTimer)
+    destroyTimer = null
+  }
+}
+
 function destroyHighchartsRandom() {
+  if (initTimer) {
+    window.clearTimeout(initTimer)
+    initTimer = null
+  }
+  if (!activeGrid && activeTimers.length === 0) {
+    return
+  }
   initSession += 1
   stopAllTickers()
-  const grid = activeGrid || document.getElementById("charts-grid")
+  const grid = activeGrid
   if (grid) {
     grid.replaceChildren()
     delete grid.dataset.initialized
@@ -119,25 +160,26 @@ function destroyHighchartsRandom() {
   activeGrid = null
 }
 
-function initHighchartsRandom() {
+function initHighchartsRandom({ force = false } = {}) {
   const grid = document.getElementById("charts-grid")
-  if (!grid) {
+  if (!grid || !grid.isConnected) {
     return
   }
+
+  cancelScheduledDestroy()
 
   if (activeGrid && activeGrid !== grid) {
     destroyHighchartsRandom()
   }
-  if (grid.dataset.initialized === "true" || grid.dataset.initializing === "true") {
+  if (!force && !gridNeedsInit(grid)) {
     return
   }
 
+  delete grid.dataset.initialized
   grid.dataset.initializing = "true"
   stopAllTickers()
   const session = initSession
   grid.replaceChildren()
-  grid.dataset.initialized = "true"
-  delete grid.dataset.initializing
   activeGrid = grid
 
   for (let i = 0; i < CHART_COUNT; i++) {
@@ -164,20 +206,40 @@ function initHighchartsRandom() {
     )
     grid.appendChild(el)
   }
+
+  delete grid.dataset.initializing
+  grid.dataset.initialized = "true"
+
+  if (grid.children.length < CHART_COUNT) {
+    delete grid.dataset.initialized
+    scheduleTryInit()
+  }
 }
 
 function tryInit() {
   const grid = document.getElementById("charts-grid")
-  if (!grid) {
+  if (!grid || !grid.isConnected) {
     return
   }
-  if (activeGrid && activeGrid !== grid) {
-    destroyHighchartsRandom()
-  }
-  if (grid.dataset.initialized === "true" || grid.dataset.initializing === "true") {
+  if (!gridNeedsInit(grid)) {
     return
   }
   initHighchartsRandom()
+}
+
+function scheduleTryInit() {
+  cancelScheduledDestroy()
+  if (initTimer) {
+    window.clearTimeout(initTimer)
+  }
+  initTimer = window.setTimeout(() => {
+    initTimer = null
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        tryInit()
+      })
+    })
+  }, INIT_DEBOUNCE_MS)
 }
 
 function watchForGrid() {
@@ -185,26 +247,25 @@ function watchForGrid() {
   const observer = new MutationObserver(() => {
     const grid = document.getElementById("charts-grid")
     if (!grid) {
-      destroyHighchartsRandom()
+      if (activeGrid || activeTimers.length > 0) {
+        scheduleDestroy()
+      }
       return
     }
-    if (activeGrid && activeGrid !== grid) {
-      destroyHighchartsRandom()
-    }
-    tryInit()
+    scheduleTryInit()
   })
   observer.observe(root, { childList: true, subtree: true })
 }
 
-window.antmanInitHighchartsRandom = initHighchartsRandom
+window.antmanInitHighchartsRandom = () => initHighchartsRandom({ force: true })
 window.antmanDestroyHighchartsRandom = destroyHighchartsRandom
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
-    tryInit()
+    scheduleTryInit()
     watchForGrid()
   })
 } else {
-  tryInit()
+  scheduleTryInit()
   watchForGrid()
 }

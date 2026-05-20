@@ -57,6 +57,28 @@ body:has(.highcharts-random-page) {
   padding: 0.5rem 1rem;
 }
 
+.layout-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem 0.5rem;
+}
+
+.layout-btn {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+  background: #2a3f5f;
+  color: #e0e0e0;
+  border: 1px solid #4a6a8f;
+  border-radius: 3px;
+}
+
+.layout-btn:hover {
+  background: #3a5f8f;
+}
+
 .muted {
   color: #888;
 }
@@ -174,10 +196,8 @@ tr:nth-child(even) {
   color: #a8d4ff;
 }
 
-/* Stream panels live on layout-page until moved into Golden Layout */
-.layout-page > #panel-positions,
-.layout-page > #panel-trades,
-.layout-page > #panel-notifications {
+/* Stream panels stay in #panel-stash until Golden Layout moves them */
+.panel-stash {
   display: none;
 }
 

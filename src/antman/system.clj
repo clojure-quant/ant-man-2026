@@ -15,8 +15,8 @@
            :href "https://cdn.jsdelivr.net/npm/golden-layout@2.6.0/dist/css/goldenlayout-base.css"}]
    [:link {:rel "stylesheet"
            :href "https://cdn.jsdelivr.net/npm/golden-layout@2.6.0/dist/css/themes/goldenlayout-dark-theme.css"}]
-   [:script {:type "module" :src "/js/golden-layout.js"}]
-   [:script {:type "module" :src "/js/highcharts-random.js?v=2"}]])
+   [:script {:type "module" :src "/js/golden-layout.js?v=4"}]
+   [:script {:type "module" :src "/js/highcharts-random.js?v=4"}]])
 
 (defn create-handler
   []
