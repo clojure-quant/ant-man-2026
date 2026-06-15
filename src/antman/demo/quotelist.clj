@@ -14,29 +14,26 @@
         am (create-account-manager log-fn)
         _ (add-edn-accounts am "demo-quote-accounts.edn")] am))
 
-
-(def quotelist (atom {}))
-
-(defn quote-printer [f]
-  (m/reduce
-   (fn [s v]
-     ;(println "QUOTELIST: " v)
-     (reset! quotelist v)
-     nil)
-   nil
-   f))
-
-
-(def dispose!
+(defn create-quotelist []
   (let [ql (quote-list-dict-flow am (fn [_asset] 1)
                                  ["EURUSD" "USDJPY" "EURNOK"])
-        qp (quote-printer ql)
+        quotelist (atom {})
+        quote-processor   (m/reduce
+                           (fn [s v]
+                             ;(println "QUOTELIST: " v)
+                             (reset! quotelist v)
+                             nil)
+                           nil ql)
+        dispose! (quote-processor #(println "1-quote-printer done " %) 
+                                  #(println "1-quote-printer CRASH " %))
         ]
-    (qp #(println "1-quote-printer done " %) #(println "1-quote-printer CRASH " %))
-    ))
+    {:dispose! dispose! 
+     :quotelist quotelist}))
+
+    
 
 
-(comment 
+(comment
   @quotelist
   am
   (dispose!)
