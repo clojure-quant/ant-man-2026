@@ -28,6 +28,12 @@ body {
   padding: 1rem;
 }
 
+.quotelist-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
 body:has(.layout-page),
 body:has(.highcharts-random-page) {
   overflow: hidden;

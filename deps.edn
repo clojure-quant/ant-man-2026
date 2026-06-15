@@ -1,9 +1,11 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.12.4"}
+        missionary/missionary {:mvn/version "b.46"}
+        org.clojure/tools.logging {:mvn/version "1.3.0"}
         dynamic-alpha/hyper {:git/url "https://github.com/dynamic-alpha/hyper"
                              :git/sha "c84c52da62e7e2d93f6af38ae82cc236baaf2234"}
-        missionary/missionary {:mvn/version "b.46"}
-        org.clojure/tools.logging {:mvn/version "1.3.0"}}
+        io.github.clojure-quant/quanta-blotter {:mvn/version "0.1.45"}
+        }
  :aliases
  {:run {:main-opts ["-m" "antman.core"]}
   :dev {:extra-deps {io.github.tonsky/clj-reload {:mvn/version "1.0.0"}}}

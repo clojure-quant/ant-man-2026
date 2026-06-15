@@ -3,7 +3,8 @@
    [antman.ui.trading :refer [trading-page]]
    [antman.ui.layout-page :refer [layout-page]]
    [antman.ui.highcharts-random-page :refer [highcharts-random-page]]
-   [antman.ui.panels :refer [positions-panel trades-panel]]))
+   [antman.ui.panels :refer [positions-panel trades-panel]]
+   [antman.ui.quotelist-page :refer [quotelist-page]]))
 
 (def routes
   [["/" {:name :home
@@ -28,4 +29,8 @@
    ["/panels/trades"
     {:name :panel-trades
      :title "Trades"
-     :get #'trades-panel}]])
+     :get #'trades-panel}]
+   ["/quotelist"
+    {:name :quotelist
+     :title "Quote list"
+     :get #'quotelist-page}]])
