@@ -518,3 +518,13 @@ tr:nth-child(even) {
 .simulator-submit:hover {
   background: #3a5f8f;
 }
+
+.simulator-toast {
+  margin: 0.35rem 0 0;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  color: #a8e6a3;
+  background: #1a3d1a;
+  border: 1px solid #2d6b2d;
+  border-radius: 3px;
+}

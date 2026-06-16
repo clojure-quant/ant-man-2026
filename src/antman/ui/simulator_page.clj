@@ -44,7 +44,7 @@
    [:td [:input {:type "number" :step "any" :data-bind percent :value (:percent defaults)}]]
    [:td [:input {:type "checkbox" :data-bind hit :checked (:hit defaults)}]]])
 
-(defn- submit-signal! [tp-signals & signals]
+(defn- submit-signal! [triggered* tp-signals & signals]
   (let [[trade-id* lifecycle-id* symbol* direction* status* source-protocol*
          entry-order-type* requested-entry-price* filled-price* initial-stop-price*
          current-stop-price* quantity* remaining-quantity* remaining-pct* net-r*
@@ -82,7 +82,11 @@
                  [:risk-decision :outcome] @rd-outcome*
                  [:risk-decision :profile-name] @rd-profile-name*
                  [:risk-decision :violations] @rd-violations*})]
-    (println "Received signal:" (pr-str signal))))
+    (println "Received signal:" (pr-str signal))
+    (reset! triggered* true)
+    (future
+      (Thread/sleep 5000)
+      (reset! triggered* false))))
 
 (defn simulator-page
   [_req]
@@ -112,6 +116,7 @@
         rd-profile-name* (sig trade [:risk-decision :profile-name])
         rd-violations* (h/signal [:risk-decision :violations]
                                  (json/generate-string (:violations (:risk-decision trade))))
+        submit-triggered* (h/signal :submit-triggered false)
         tp-signals (vec (for [n (range (count (:take-profits trade)))]
                           (take-profit-signals trade n)))]
     [:motion.div.simulator-page
@@ -157,7 +162,7 @@
        {:type "button"
         :data-on:click
         (h/action {:as "submit-signal"}
-                  (submit-signal! tp-signals
+                  (submit-signal! submit-triggered* tp-signals
                                   trade-id* lifecycle-id* symbol* direction* status*
                                   source-protocol* entry-order-type* requested-entry-price*
                                   filled-price* initial-stop-price* current-stop-price*
@@ -165,4 +170,8 @@
                                   opened-at* updated-at* closed-at* close-reason*
                                   broker-ref* broker-position-id* rd-outcome*
                                   rd-profile-name* rd-violations*))}
-       "Submit"]]]))
+       "Submit"]
+      [:p.simulator-toast
+       {:data-show @submit-triggered*
+        :style "display:none"}
+       "triggered new signal"]]]))
