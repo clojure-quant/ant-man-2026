@@ -146,4 +146,6 @@
    " · "
    [:a (h/navigate :highcharts-random) "Highcharts random"]
    " · "
-   [:a (h/navigate :quotelist) "Quote list"]])
+   [:a (h/navigate :quotelist) "Quote list"]
+   " · "
+   [:a (h/navigate :simulator) "Simulator"]])

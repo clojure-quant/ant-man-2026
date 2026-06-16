@@ -9,4 +9,5 @@
   (println "  /trading — positions and trades tables")
   (println "  /layout  — Golden Layout workspace")
   (println "  /quotelist — live quote dictionary")
+  (println "  /simulator — edit and submit trade signal")
   (system/start! {:port 3000}))

@@ -4,7 +4,8 @@
    [antman.ui.layout-page :refer [layout-page]]
    [antman.ui.highcharts-random-page :refer [highcharts-random-page]]
    [antman.ui.panels :refer [positions-panel trades-panel]]
-   [antman.ui.quotelist-page :refer [quotelist-page]]))
+   [antman.ui.quotelist-page :refer [quotelist-page]]
+   [antman.ui.simulator-page :refer [simulator-page]]))
 
 (def routes
   [["/" {:name :home
@@ -33,4 +34,8 @@
    ["/quotelist"
     {:name :quotelist
      :title "Quote list"
-     :get #'quotelist-page}]])
+     :get #'quotelist-page}]
+   ["/simulator"
+    {:name :simulator
+     :title "Signal simulator"
+     :get #'simulator-page}]])
