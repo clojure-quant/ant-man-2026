@@ -1,9 +1,11 @@
 (ns antman.system
   (:require
-   [hyper.core :as h]
-   [antman.routes :refer [routes]]
+   [antman.auth :as auth]
+   [antman.config :as config]
+   [antman.routes :as routes]
    [antman.sim.state :as sim]
-   [antman.sse.heartbeat :as heartbeat]))
+   [antman.sse.heartbeat :as heartbeat]
+   [hyper.core :as h]))
 
 (defn head-tags
   [_req]
@@ -21,20 +23,28 @@
 (defn create-handler
   []
   (h/create-handler
-    #'routes
-    :static-resources "public"
-    :head #'head-tags
-    :watches [#'sim/positions* #'sim/trades* #'sim/notifications* #'heartbeat/server-ts*]))
+   #'routes/all-routes
+   :static-resources "public"
+   :head #'head-tags
+   :middleware [auth/wrap-hydrate-identity]
+   :watches [#'sim/positions* #'sim/trades* #'sim/notifications* #'heartbeat/server-ts*]))
 
 (defonce server* (atom nil))
+(defonce config* (atom nil))
 
 (defn start!
-  [{:keys [port] :or {port 3000}}]
-  (sim/start!)
-  (heartbeat/start!)
-  (when-not @server*
-    (reset! server* (h/start! (create-handler) {:port port})))
-  @server*)
+  ([]
+   (start! (config/load-config!)))
+  ([cfg]
+   (let [cfg (merge (config/load-config!) cfg)]
+     (reset! config* cfg)
+     (auth/start-token! cfg)
+     (routes/rebuild! @auth/token*)
+     (sim/start!)
+     (heartbeat/start!)
+     (when-not @server*
+       (reset! server* (h/start! (create-handler) {:port (or (:port cfg) 3000)})))
+     @server*)))
 
 (defn stop!
   []

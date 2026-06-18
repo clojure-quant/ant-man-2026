@@ -10,3 +10,6 @@ target/
 .clj-kondo/.cache
 .clj-kondo/imports
 log/
+secrets.edn
+resources/secrets.edn
+.gorilla/
