@@ -148,4 +148,6 @@
    " · "
    [:a (h/navigate :quotelist) "Quote list"]
    " · "
-   [:a (h/navigate :simulator) "Simulator"]])
+   [:a (h/navigate :simulator) "Simulator"]
+   " · "
+   [:a {:href "/me"} "User"]])
