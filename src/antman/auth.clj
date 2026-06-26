@@ -6,7 +6,7 @@
 
 (defonce token* (atom nil))
 
-(defn start-token!
+(defn start-token-service!
   [{:keys [users token]}]
   (let [token-cfg {:users users
                    :secret (:secret token)

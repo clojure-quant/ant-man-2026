@@ -1,7 +1,6 @@
-(ns antman.system
+(ns antman.handler
   (:require
    [antman.auth :as auth]
-   [antman.config :as config]
    [antman.routes :as routes]
    [antman.sim.state :as sim]
    [antman.sse.heartbeat :as heartbeat]
@@ -21,35 +20,11 @@
    [:script {:type "module" :src "/js/highcharts-random.js?v=4"}]])
 
 (defn create-handler
-  []
+  "Ring handler for Hyper. Optional clip refs establish service start order."
+  [& _deps]
   (h/create-handler
    #'routes/all-routes
    :static-resources "public"
    :head #'head-tags
    :middleware [auth/wrap-hydrate-identity]
    :watches [#'sim/positions* #'sim/trades* #'sim/notifications* #'heartbeat/server-ts*]))
-
-(defonce server* (atom nil))
-(defonce config* (atom nil))
-
-(defn start!
-  ([]
-   (start! (config/load-config!)))
-  ([cfg]
-   (let [cfg (merge (config/load-config!) cfg)]
-     (reset! config* cfg)
-     (auth/start-token! cfg)
-     (routes/rebuild! @auth/token*)
-     (sim/start!)
-     (heartbeat/start!)
-     (when-not @server*
-       (reset! server* (h/start! (create-handler) {:port (or (:port cfg) 3000)})))
-     @server*)))
-
-(defn stop!
-  []
-  (sim/stop!)
-  (heartbeat/stop!)
-  (when-let [app @server*]
-    (h/stop! app)
-    (reset! server* nil)))
